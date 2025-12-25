@@ -24,9 +24,9 @@ uv run main.py
 ROCmが利用可能なdockerバージョンを実行
 ```
 docker pull rocm/pytorch:rocm7.1.1_ubuntu22.04_py3.10_pytorch_release_2.9.1
-docker run -it     --cap-add=SYS_PTRACE     --security-opt seccomp=unconfined     --device=/dev/kfd     --device=/dev/dri     --group-add video     --ipc=host     --shm-size 8G     rocm/pytorch:rocm7.1.1_ubuntu22.04_py3.10_pytorch_release_2.9.1
+docker run -it --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --device=/dev/kfd --device=/dev/dri --group-add video --ipc=host --shm-size 8G     rocm/pytorch:rocm7.1.1_ubuntu22.04_py3.10_pytorch_release_2.9.1
 ```
-参考: https://rocm.docs.amd.com/projects/install-on-linux/en/develop/install/3rd-party/pytorch-install.html#using-wheels-package
+参考: https://rocm.docs.amd.com/projects/install-on-linux/en/develop/install/3rd-party/pytorch-install.html
 
 以降は **1.1.** と基本的に同様
 
