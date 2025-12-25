@@ -28,22 +28,36 @@ docker run -it --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --device=/
 ```
 参考: https://rocm.docs.amd.com/projects/install-on-linux/en/develop/install/3rd-party/pytorch-install.html
 
-以降は **1.1.** と基本的に同様
+projectのクローン
+```
+git clone https://github.com/CameIIian/gpu_benchmark_4llm
+```
+
+packageのインストール
+```
+cd gpu_benchmark_4llm/bench_radeon/
+uv sync
+```
+
+実行
+```
+uv run main.py
+```
 
 **エラーへの対処**
 1. パッケージが取得できない場合\
- 1つずつadd していってください\
+ 1つずつ自環境で"uv add"してください\
   参考: https://qiita.com/tsuchm/items/d0cff0c53f3ffb690901
 
 2. /opt/venv/lib/python3.10/site-packages/unsloth/device_type.py \
  NameError: name 'inspect' is not defined \
- -> device_type.pyにimport文を追加すれば動作する
+ -> device_type.pyにimport文を追加
 
-3. module torch has no attribute no_gad\
+3. Exception: operator torchvision::nms does not exist\
+ 不要。各パッケージの問題を起こしている部分を全てコメントアウトする
+
+4. module torch has no attribute no_gad\
  修正方法が基本的にtorchのアップデートなので、利用しないようにする
-
-4. Exception: operator torchvision::nms does not exist\
- 不要なので全てコメントアウトしていく
 
 #### uv_only version
 wip
