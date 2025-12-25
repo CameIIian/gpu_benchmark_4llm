@@ -72,9 +72,9 @@ Model: gpt-oss:20b (4bit量子化ON)
 
 ### 2.2. 実験結果
 #### 推論
-TokenPerSeconds(TPS): 5種類の推論を3セット行ったときの平均
-mem(preload): 読込時のVRAMの最大使用量
-mem(infer): 推論時のVRAM最大使用量
+TokenPerSeconds(TPS): 5種類の推論を3セット行ったときの平均\
+mem(preload): 読込時のVRAMの最大使用量\
+mem(infer): 推論時のVRAM最大使用量\
 
 | name | TPS | mem(preload) | mem(infer) | 
 | --- | --- | --- | --- |
@@ -83,4 +83,11 @@ mem(infer): 推論時のVRAM最大使用量
 | N2 | 19.29 | 20GB | 12.5GB |
 
 #### 学習
+time: 学習終了までの時間\
+mem: 学習時のVRAM最大使用量
 
+| name | time | mem | 
+| --- | --- | --- | --- |
+| R1 | - | -GB |
+| N1 | - | -GB | 
+| N2 | - | -GB |
