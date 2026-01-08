@@ -1,12 +1,10 @@
-# ==========================================
-# Nvidia_GPU / CPUの推論性能を測定するプログラム
-# ==========================================
-
 import time
+from sys import exit
 import platform
 import torch
 from unsloth import FastLanguageModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
+
 
 # ==========================================
 # 設定エリア
@@ -40,12 +38,9 @@ def get_device_info():
         name = torch.cuda.get_device_name(0)
         print(f"✅ GPU Detected: {name}")
         return "cuda"
-    elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-        print("✅ Apple Silicon GPU Detected (MPS)")
-        return "mps"
     else:
-        print("⚠️ GPU NOT Detected. Using CPU.")
-        return "cpu"
+        print("⚠️ no supported hardwares, if U use Radeon, please check rocm-smi etc")
+        exit(1)
 
 # ==========================================
 # ウォームアップ
@@ -55,12 +50,10 @@ def perform_warmup(model, tokenizer, device):
     print(f"\n{'='*20} Warming up... {'='*20}")
     inputs = tokenizer("Hello, world!", return_tensors="pt").to(device)
 
-    with torch.no_grad():
-        _ = model.generate(
-            **inputs,
-            max_new_tokens=20,
-            pad_token_id=tokenizer.eos_token_id
-        )
+    _ = model.generate(**inputs,
+        max_new_tokens=20,
+        pad_token_id=tokenizer.eos_token_id
+    )
 
     if device == "cuda":
         torch.cuda.empty_cache()
@@ -80,42 +73,12 @@ def measure_performance(model_id):
     print(f"4bit Quantization: {'ON' if USE_4BIT else 'OFF'}")
     print(f"{'='*60}")
 
-    try:
-        # ------------------------------
-        # 4bit量子化ON（CUDA限定）
-        # ------------------------------
-        if USE_4BIT and device == "cuda":
-            model, tokenizer = FastLanguageModel.from_pretrained(
-                model_name=model_id,
-                max_seq_length=MAX_SEQ_LENGTH,
-                load_in_4bit=True,
-            )
-            model.eval()
-
-        # ------------------------------
-        # 通常ロード
-        # ------------------------------
-        else:
-            tokenizer = AutoTokenizer.from_pretrained(model_id)
-
-            if device == "cpu":
-                model = AutoModelForCausalLM.from_pretrained(
-                    model_id,
-                    torch_dtype=torch.float32,
-                    device_map="cpu"
-                )
-            else:
-                model = AutoModelForCausalLM.from_pretrained(
-                    model_id,
-                    torch_dtype="auto",
-                    device_map="auto"
-                )
-
-            model.eval()
-
-    except Exception as e:
-        print(f"❌ Model loading failed: {e}")
-        return
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name=model_id,
+        max_seq_length=MAX_SEQ_LENGTH,
+        load_in_4bit=True,
+    )
+    model.eval()
 
     perform_warmup(model, tokenizer, device)
 
@@ -130,18 +93,15 @@ def measure_performance(model_id):
 
             inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
 
-            if device == "cuda":
-                torch.cuda.empty_cache()
-                torch.cuda.reset_peak_memory_stats()
+            torch.cuda.empty_cache()
+            torch.cuda.reset_peak_memory_stats()
 
             start = time.perf_counter()
 
-            with torch.no_grad():
-                outputs = model.generate(
-                    **inputs,
-                    max_new_tokens=MAX_NEW_TOKENS,
-                    pad_token_id=tokenizer.eos_token_id
-                )
+            outputs = model.generate(**inputs,
+                max_new_tokens=MAX_NEW_TOKENS,
+                pad_token_id=tokenizer.eos_token_id
+            )
 
             end = time.perf_counter()
 
