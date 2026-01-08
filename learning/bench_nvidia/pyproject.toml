@@ -1,0 +1,15 @@
+[project]
+name = "bench-nvidia"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "datasets>=4.3.0",
+    "psutil>=7.2.1",
+    "setuptools>=80.9.0",
+    "torch>=2.9.1",
+    "transformers>=4.57.3",
+    "trl>=0.24.0",
+    "unsloth>=2026.1.2",
+]
