@@ -180,6 +180,7 @@ wip
 | R1 | AMD Ryzen Threadripper 7960X | 128GB | Radeon AI PRO 9700 32GB |
 | N1 | AMD Ryzen Threadripper 7960X | 128GB | NVIDIA RTX 5090 32GB |
 | N2 | Intel(R) Xeon(R) W-1290P | 64GB | NVIDIA RTX A6000 48GB |
+| N3 | Intel(R) Xeon(R) W-1290P | 64GB | NVIDIA RTX A6000 94GB * 8 |
 
 <br/>
 
@@ -212,6 +213,7 @@ mem(infer): 推論時のVRAM最大使用量
 | R1 | 7.09 | 16GB | 16GB |
 | N1 | - | -GB | -GB |
 | N2 | 19.29 | 20GB | 12.5GB |
+| N3 | 25.40 | 24.5GB | 17GB |
 
 #### 学習
 time: 学習終了までの時間\
@@ -223,6 +225,7 @@ mem: 学習時のVRAM最大使用量
 | R1 | 1244.50s | 30GB |
 | N1 | -s | -GB | 
 | N2 |  800.41s | 21GB | 
+| N3 |  -s | -GB | 
 
 ##### Ministral-3-3B (FullFT, epoc = 1)
 | name | time | mem | 
@@ -230,3 +233,4 @@ mem: 学習時のVRAM最大使用量
 | R1 | -s | -GB |
 | N1 | -s | -GB | 
 | N2 | -s | -GB | 
+| N3 | -s | -GB | 
